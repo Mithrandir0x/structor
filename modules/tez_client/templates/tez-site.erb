@@ -19,6 +19,9 @@
      map{|node| node[:hostname] + "." + @domain};
    @tez = eval(@nodes).select {|node| node[:roles].include? 'tez-ui'
        }.map{|node| node[:hostname] + "." + @domain};
+
+   @pfl_yarn = eval(@profile)[:yarn];
+   @yarn_tez = @pfl_yarn ? @pfl_yarn[:tez] : nil;
  -%>
 <?xml version="1.0"?>
 <configuration supports_final="true" supports_do_not_extend="true">
@@ -57,7 +60,13 @@
 
   <property>
     <name>tez.am.resource.memory.mb</name>
-    <value><%= @am_mem %></value>
+    <value>
+      <% if @yarn_tez %>
+        <%= @yarn_tez[:tez_am_resource_memory_mb] %>
+      <% else %>
+        <%= @am_mem %>
+      <% end %>
+    </value>
     <description>The amount of memory to be used by the AppMaster.
       Used only if the value is not specified explicitly by the DAG definition.
     </description>
@@ -89,7 +98,13 @@
 
   <property>
     <name>tez.task.resource.memory.mb</name>
-    <value><%= @client_mem %></value>
+    <value>
+      <% if @yarn_tez %>
+        <%= @yarn_tez[:tez_task_resource_memory_mb] %>
+      <% else %>
+        <%= @client_mem %>
+      <% end %>
+    </value>
     <description>The amount of memory to be used by launched tasks.
       Used only if the value is not specified explicitly by the DAG definition.
     </description>
@@ -294,13 +309,25 @@
 
   <property>
     <name>tez.runtime.io.sort.mb</name>
-    <value><%= @client_mem.to_i / 3 %></value>
+    <value>
+      <% if @yarn_tez %>
+        <%= @yarn_tez[:tez_runtime_io_sort_mb] %>
+      <% else %>
+        <%= @client_mem.to_i / 3 %>
+      <% end %>
+      </value>
     <description>The size of the sort buffer when output needs to be sorted</description>
   </property>
 
   <property>
     <name>tez.runtime.unordered.output.buffer.size-mb</name>
-    <value><%= @client_mem.to_i / 10 %></value>
+    <value>
+      <% if @yarn_tez %>
+        <%= @yarn_tez[:tez_runtime_unordered_output_buffer_size_mb] %>
+      <% else %>
+        <%= @client_mem.to_i / 10 %>
+      <% end %>
+    </value>
     <description>The size of the buffer when output does not require to be sorted</description>
   </property>
 

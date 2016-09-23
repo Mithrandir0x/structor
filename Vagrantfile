@@ -103,18 +103,45 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     platform_start_script_path = "init.d"
   end
 
-  config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", profile[:vm_mem] ]
-    vb.customize ["modifyvm", :id, "--cpus", profile[:vm_cpus] ]
-    vb.customize ["modifyvm", :id, "--ioapic", "on"]
-  end
-
-  config.vm.provider :vmware_fusion do |vm|
-    vm.vmx["memsize"] = profile[:vm_mem]
-  end
-
   profile[:nodes].each do |node|
-    config.vm.define node[:hostname] do |node_config|
+    config.vm.define node[:hostname] do |node_config|      
+
+      config.vm.provider :virtualbox do |vb|
+        if node[:vm_mem]
+          vb.customize ["modifyvm", :id, "--memory", node[:vm_mem] ]
+        else
+          vb.customize ["modifyvm", :id, "--memory", profile[:vm_mem] ]
+        end
+        
+        if node[:vm_cpus]
+          vb.customize ["modifyvm", :id, "--cpus", node[:vm_cpus] ]
+        else
+          vb.customize ["modifyvm", :id, "--cpus", profile[:vm_cpus] ]
+        end
+
+        vb.customize ["modifyvm", :id, "--ioapic", "on"]
+      end
+
+      config.vm.provider :vmware_fusion do |vm|
+        if node[:vm_mem]
+          vm.vmx["memsize"] = node[:vm_mem]
+        else
+          vm.vmx["memsize"] = profile[:vm_mem]
+        end
+      end
+
+      if node[:forwarded_ports]
+        node[:forwarded_ports].each do |forwarded_port|
+          node_config.vm.network :forwarded_port, guest: forwarded_port[:guest], host: forwarded_port[:host], auto_correct: true
+        end
+      end
+
+      if node[:shared_folders]
+        profile[:shared_folders].each do |shared_folder|
+          node_config.vm.synced_folder shared_folder[:host], shared_folder[:guest]
+        end
+      end
+
       node_config.vm.hostname = node[:hostname] + "." + profile[:domain]
       node_config.vm.network :private_network, ip: node[:ip]
       node_config.ssh.forward_agent = true
@@ -123,7 +150,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         puppet.environment_path = "environments"
         puppet.environment = "structor"
         puppet.options = ["--libdir", "/vagrant", 
-	    "--verbose", "--debug",
+            "--verbose", "--debug",
             "--fileserverconfig=/vagrant/fileserver.conf"]
         puppet.facter = {
           "platform_start_script_path" => platform_start_script_path,
@@ -133,7 +160,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           "hdp_short_version" => profile[:hdp_short_version],
           "ambari_version" => profile[:ambari_version],
           "ambari_unstable" => profile[:ambari_unstable],
-	  "package_version" => package_version,
+          "package_version" => package_version,
 
           "am_mem" => profile[:am_mem],
           "client_mem" => profile[:client_mem],
@@ -152,10 +179,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           "profile" => profile,
           "roles" => node[:roles],
 
-	  "hdp_version" => hdp_version,
-	  "hdp_version_major" => hdp_version_major,
-	  "hdp_version_minor" => hdp_version_minor,
-	  "hdp_version_patch" => hdp_version_patch,
+          "hdp_version" => hdp_version,
+          "hdp_version_major" => hdp_version_major,
+          "hdp_version_minor" => hdp_version_minor,
+          "hdp_version_patch" => hdp_version_patch,
 
           "hive_options" => profile[:hive_options],
         }
