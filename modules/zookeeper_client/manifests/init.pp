@@ -14,6 +14,7 @@
 #   limitations under the License.
 
 class zookeeper_client {
+  require hadoop_server
   require repos_setup
   require hdp_select
   require jdk
