@@ -22,6 +22,7 @@ class odbc_client {
   $driverini_path="/usr/lib/hive/lib/native/Linux-amd64-64/hortonworks.hiveodbc.ini"
 
   if ($operatingsystem == "centos") {
+    $fetcher="wget"
     package { [ "unixODBC", "unixODBC-devel", "cyrus-sasl-gssapi", "cyrus-sasl-plain" ]:
       ensure => installed,
       before => Exec["Download ODBC"],
@@ -40,6 +41,7 @@ class odbc_client {
       $driver_url="http://public-repo-1.hortonworks.com/HDP/hive-odbc/$version/centos7/$rpm"
     }
   } else {
+    $fetcher="wget"
     package { [ "unixodbc", "unixodbc-dev", "libsasl2-modules-gssapi-mit" ]:
       ensure => installed,
       before => Exec["Download ODBC"],
@@ -52,7 +54,7 @@ class odbc_client {
   }
 
   exec { "Download ODBC":
-    command => "curl -C - -O $driver_url",
+    command => "$fetcher $driver_url",
     cwd => "/tmp",
     path => "$path",
   }
