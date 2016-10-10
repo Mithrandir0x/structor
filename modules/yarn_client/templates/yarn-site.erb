@@ -14,16 +14,22 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -%>
-<% @yarnlist = 
-    eval(@nodes).select {|node| node[:roles].include? 'yarn'}.
-                 map{|node| node[:hostname] + "." + @domain};
-    @yarn = @yarnlist.size > 0 ? @yarnlist[0] : "unknown";
-    @ats_servers = eval(@nodes).
+<% 
+   @yarnnodelist = eval(@nodes).select {|node| node[:roles].include? 'yarn'};
+   @yarnlist = @yarnnodelist.map{|node| node[:hostname] + "." + @domain};
+   @yarn = @yarnlist.size > 0 ? @yarnlist[0] : "unknown";
+   @ats_servers = eval(@nodes).
       select {|node| node[:roles].include? 'yarn-timelineserver'}.
       map{|node| node[:hostname] + "." + @domain};
     
-    @pfl_yarn = eval(@profile)[:yarn];
-    @yarn_sch = @pfl_yarn ? @pfl_yarn[:scheduler] : nil;
+   @pfl_yarn = eval(@profile)[:yarn];
+   @yarn_sch = @pfl_yarn ? @pfl_yarn[:scheduler] : nil;
+
+   # Make yarn webapp visible outside the internal network (open port 19888)
+   @yarn_webapp = @yarn
+   if @yarnnodelist.size > 0 && @yarnnodelist[0][:hostname] == @hostname
+     @yarn_webapp = '0.0.0.0'
+   end
  -%>
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
@@ -297,7 +303,7 @@
     
   <property>
     <name>yarn.resourcemanager.webapp.address</name>
-    <value><%= @yarn %>:8088</value>
+    <value><%= @yarn_webapp %>:8088</value>
   </property>
     
   <property>

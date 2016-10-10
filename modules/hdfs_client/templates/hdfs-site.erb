@@ -14,10 +14,16 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -%>
-<% @namenode = eval(@nodes).select {|node| node[:roles].include? 'nn'
-                  }[0][:hostname] + "." + @domain;
-   @numslaves = eval(@nodes).select {|node| node[:roles].include? 'slave'
-                  }.size;
+<% 
+   @namenodelist = eval(@nodes).select {|node| node[:roles].include? 'nn'};
+   @namenode = @namenodelist[0][:hostname] + "." + @domain;
+   @numslaves = eval(@nodes).select {|node| node[:roles].include? 'slave'}.size;
+   
+   # Make yarn webapp visible outside the internal network (open port 19888)
+   @nn_webapp = @namenode
+   if @namenodelist.size > 0 && @namenodelist[0][:hostname] == @hostname
+     @nn_webapp = '0.0.0.0'
+   end
  -%>
 <?xml version="1.0"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
@@ -146,7 +152,7 @@
 
   <property>
     <name>dfs.namenode.http-address</name>
-    <value><%= @namenode %>:50070</value>
+    <value><%= @nn_webapp %>:50070</value>
   </property>
 
   <property>
@@ -226,7 +232,7 @@
 
   <property>
     <name>dfs.replication.max</name>
-    <value><%= [ [50, @numslaves].min, 3 ].max %></value>
+    <value><%= [50, @numslaves].min %></value>
   </property>
 
   <property>
