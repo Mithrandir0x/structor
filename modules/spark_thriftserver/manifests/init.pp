@@ -14,6 +14,7 @@
 #   limitations under the License.
 
 class spark_thriftserver {
+  require hive_client
   require spark_client
 
   if $security == "true" {
