@@ -15,7 +15,6 @@
 
 class kafka_server {
   require repos_setup
-  require zookeeper_server
   require jdk
 
   $path="/bin:/usr/bin"
