@@ -49,6 +49,12 @@ class kafka_server {
     require => Package['kafka'],
   }
 
+  file { "/usr/bin/kafka-topics":
+    ensure => "file",
+    mode => '755',
+    content => template('kafka_server/kafka-topics.erb'),
+  }
+
   # Create a topic called test.
   file { "/tmp/create_test_topic.sh":
     ensure => "file",
