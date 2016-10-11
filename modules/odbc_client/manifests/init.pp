@@ -41,7 +41,7 @@ class odbc_client {
       $driver_url="http://public-repo-1.hortonworks.com/HDP/hive-odbc/$version/centos7/$rpm"
     }
   } else {
-    $fetcher="wget"
+    $fetcher="curl -C - -O"
     package { [ "unixodbc", "unixodbc-dev", "libsasl2-modules-gssapi-mit" ]:
       ensure => installed,
       before => Exec["Download ODBC"],
@@ -50,7 +50,7 @@ class odbc_client {
     $build="hive-odbc-native_$version"
     $rpmbase="$build-2_amd64"
     $rpm="$rpmbase.deb"
-    $driver_url="http://public-repo-1.hortonworks.com/HDP/hive-odbc/$version/debian/$rpm"
+    $driver_url="http://public-repo-1.hortonworks.com/HDP/hive-odbc/$version/ubuntu/$rpm"
   }
 
   exec { "Download ODBC":
