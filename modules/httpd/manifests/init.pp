@@ -14,19 +14,26 @@
 #   limitations under the License.
 
 class httpd {
-  package { "httpd":
+
+  if ($operatingsystem == "centos") {
+    $http_service = "httpd"
+  } else {
+    $http_service = "apache2"
+  }
+
+  package { "$http_service":
     ensure => installed,
   }
 
-  service { "httpd":
+  service { "$http_service":
     ensure => running,
     enable => true,
-    require => Package["httpd"],
+    require => Package["$http_service"],
   }
 
   file { "/var/www/html/index.html":
     ensure => file,
     content => template('httpd/index.html.erb'),
-    require => Package["httpd"],
+    require => Package["$http_service"],
   }
 }

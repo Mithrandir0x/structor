@@ -21,7 +21,7 @@ class hive2 {
   package { "hive2${package_version}":
     ensure => installed,
   }
-  package { "tez_hive2${package_version}":
+  package { "tez-hive2${package_version}":
     ensure => installed,
   }
 
@@ -39,7 +39,7 @@ class hive2 {
   file { '/etc/tez_hive2/conf/tez-site.xml':
     ensure => file,
     content => template('hive2/tez-site.xml.erb'),
-    require => Package["tez_hive2${package_version}"],
+    require => Package["tez-hive2${package_version}"],
   }
 
   # Convenience links.

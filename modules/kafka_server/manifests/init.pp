@@ -23,11 +23,6 @@ class kafka_server {
   package { "kafka" :
     ensure => installed,
   }
-  service { 'kafka':
-    ensure => running,
-    enable => true,
-    require => Package['kafka'],
-  }
 
   # Configure.
   file { '/etc/kafka/conf/consumer.properties':
@@ -36,25 +31,27 @@ class kafka_server {
     before => Service['kafka'],
     require => Package['kafka'],
   }
+  ->
   file { '/etc/kafka/conf/producer.properties':
     ensure => file,
     content => template('kafka_server/producer.properties.erb'),
     before => Service['kafka'],
     require => Package['kafka'],
   }
+  ->
   file { '/etc/kafka/conf/server.properties':
     ensure => file,
     content => template('kafka_server/server.properties.erb'),
     before => Service['kafka'],
     require => Package['kafka'],
   }
-
+  ->
   file { "/usr/bin/kafka-topics":
     ensure => "file",
     mode => '755',
     content => template('kafka_server/kafka-topics.erb'),
   }
-
+  ->
   # Create a topic called test.
   file { "/tmp/create_test_topic.sh":
     ensure => "file",
@@ -77,12 +74,22 @@ class kafka_server {
       source => "/vagrant/files/systemd/kafka.service.d/default.conf",
       before => Service["kafka"],
     }
+    ->
+    service { 'kafka':
+      ensure => running,
+      enable => true,
+      require => Package['kafka'],
+    }
   } else {
-    file { "/etc/init.d/kafka":
-      ensure => file,
-      source => 'puppet:///modules/kafka_server/kafka',
-      replace => true,
-      before => Service['kafka'],
+    exec { 'kafka-create-service':
+      command => 'cp /usr/hdp/current/kafka-broker/bin/kafka /etc/init.d/',
+      path => $path,
+    }
+    ->
+    service { 'kafka':
+      ensure => running,
+      enable => true,
+      require => Package['kafka'],
     }
   }
 }
