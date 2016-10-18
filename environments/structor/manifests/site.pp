@@ -205,6 +205,10 @@ if hasrole($roles, 'spark-thriftserver') {
   include spark_thriftserver
 }
 
+if hasrole($roles, 'zeppelin') {
+  include zeppelin
+}
+
 if hasrole($roles, 'slave') {
   include hdfs_datanode
   include yarn_node_manager
