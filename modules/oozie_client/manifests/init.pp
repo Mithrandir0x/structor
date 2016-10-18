@@ -21,6 +21,16 @@ class oozie_client {
     ensure => installed,
   }
 
+  if ($operatingsystem == "centos" and $operatingsystemmajrelease == "7") {
+    package { "mariadb-client":
+      ensure => installed,
+    }
+  } else {
+    package { "mysql-client":
+      ensure => installed,
+    }
+  }
+
   file { "/etc/profile.d/oozie.sh":
     ensure => file,
     content => template('oozie_client/oozie.erb'),
