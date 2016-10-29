@@ -4,8 +4,9 @@
                   }[0][:hostname] + "." + @domain;
  -%>
 
+cd ~
 DATA=wikiticker-2015-09-12-sampled.json
-DATAGZ=/usr/hdp/current/druid/quickstart/wikiticker-2015-09-12-sampled.json.gz
+DATAGZ=/usr/hdp/<%= @hdp_version %>/druid/quickstart/wikiticker-2015-09-12-sampled.json.gz
 SPEC=/home/vagrant/wikiticker-index-hdfs.json
 HDFS_PATH=/user/vagrant
 POST_INDEX_TASK=/vagrant/modules/druid_coordinator/files/post-index-task

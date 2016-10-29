@@ -1,9 +1,9 @@
 {
   "os": "centos7",
-  "hdp_short_version": "2.5.0",
+  "hdp_short_version": "2.6.0",
   "java_version": "java-1.8.0-openjdk",
-  "vm_mem": 12288,
-  "vm_cpus": 8,
+  "vm_mem": 6144,
+  "vm_cpus": 4,
 
   "am_mem": 512,
   "server_mem": 768,
@@ -13,12 +13,12 @@
   "domain": "example.com",
   "realm": "EXAMPLE.COM",
 
-  "clients" : [ "hdfs", "hive", "hive2", "odbc", "slider", "tez", "yarn", "zk" ],
+  "clients" : [ "hdfs", "hive", "hive2", "odbc", "slider", "spark", "tez", "yarn", "zk" ],
   "nodes": [
-    {"hostname": "llap", "ip": "192.168.59.11",
+    {"hostname": "hdp260", "ip": "192.168.59.11",
      "roles": ["client", "hive-db", "hive-meta",
-               "hive2", "hive2-llap", "hive2-server2",
-               "httpd", "nn", "slave", "tez-ui",
+               "hive2", "hive2-server2",
+               "httpd", "nn", "postgres", "slave", "tez-ui",
                "yarn", "yarn-timelineserver", "zk"]}
   ],
 
