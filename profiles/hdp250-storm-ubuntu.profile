@@ -13,6 +13,11 @@
   "domain": "example.com",
   "realm": "EXAMPLE.COM",
 
+  "storm": {
+    "ui_port": 8080,
+    "supervisor_slots_ports": [ 6700, 6701, 6702, 6703 ]
+  },
+
   "clients" : [ "hdfs", "yarn", "zk" ],
   "nodes": [
     {"hostname": "nn", "ip": "192.168.59.11",

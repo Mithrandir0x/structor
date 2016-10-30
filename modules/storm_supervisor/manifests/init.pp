@@ -14,7 +14,7 @@ class storm_supervisor {
     mode => 'a+rx',
   }
   ->
-  exec { 'add-storm-nimbus-supervisor-program':
+  exec { 'add-storm-supervisor-supervisor-program':
     command => "cat $conf_file >> ${supervisor::configuration_path}",
     path => $path,
   }

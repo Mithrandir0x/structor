@@ -14,7 +14,7 @@ class storm_logviewer {
     mode => 'a+rx',
   }
   ->
-  exec { 'add-storm-nimbus-supervisor-program':
+  exec { 'add-storm-logviewer-supervisor-program':
     command => "cat $conf_file >> ${supervisor::configuration_path}",
     path => $path,
   }

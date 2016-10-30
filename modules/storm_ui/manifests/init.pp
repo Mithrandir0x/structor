@@ -14,7 +14,7 @@ class storm_ui {
     mode => 'a+rx',
   }
   ->
-  exec { 'add-storm-nimbus-supervisor-program':
+  exec { 'add-storm-ui-supervisor-program':
     command => "cat $conf_file >> ${supervisor::configuration_path}",
     path => $path,
   }
