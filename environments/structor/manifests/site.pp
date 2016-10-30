@@ -237,6 +237,14 @@ if hasrole($roles, 'zk') {
   include zookeeper_server
 }
 
+if hasrole($roles, 'storm-nimbus') {
+  include storm_nimbus
+  include storm_ui
+  include storm_logviewer
+} elsif hasrole($roles, 'storm-supervisor') {
+  include storm_supervisor
+}
+
 if islastslave($nodes, $hostname) {
   include install_hdfs_tarballs
 
@@ -310,6 +318,15 @@ if hasrole($roles, 'nn') {
 
   if hasrole($roles, 'hbase-regionserver') {
     Class['hdfs_namenode'] -> Class['hbase_regionserver']
+  }
+
+  if hasrole($roles, 'storm-nimbus') {
+    Class['hdfs_namenode'] -> Class['storm_nimbus']
+    Class['storm_nimbus'] -> Class['storm_ui']
+  }
+
+  if hasrole($roles, 'storm-supervisor') {
+    Class['hdfs_namenode'] -> Class['storm_supervisor']
   }
 }
 
