@@ -239,8 +239,8 @@ if hasrole($roles, 'zk') {
 
 if hasrole($roles, 'storm-nimbus') {
   include storm_nimbus
-  include storm_ui
   include storm_logviewer
+  include storm_ui
 } elsif hasrole($roles, 'storm-supervisor') {
   include storm_supervisor
 }

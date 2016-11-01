@@ -18,10 +18,5 @@ class storm_nimbus {
     command => "cat $conf_file >> ${supervisor::configuration_path}",
     path => $path,
   }
-  ->
-  exec { "restart_supervisor_nimbus_service":
-    command => "service supervisor restart",
-    path => $path,
-  }
 
 }
