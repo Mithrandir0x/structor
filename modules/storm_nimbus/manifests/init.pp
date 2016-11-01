@@ -3,7 +3,7 @@ class storm_nimbus {
   
   require storm_base
 
-  $path="/bin:/usr/bin"
+  $path="/bin:/usr/bin:/sbin"
 
   $srv = 'nimbus'
   $conf_file = "/tmp/supervisor.program.storm.${srv}.conf"
@@ -16,6 +16,11 @@ class storm_nimbus {
   ->
   exec { 'add-storm-nimbus-supervisor-program':
     command => "cat $conf_file >> ${supervisor::configuration_path}",
+    path => $path,
+  }
+  ->
+  exec { "restart_supervisor_nimbus_service":
+    command => "service supervisor restart",
     path => $path,
   }
 
