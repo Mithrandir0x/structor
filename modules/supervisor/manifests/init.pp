@@ -14,26 +14,31 @@ class supervisor {
     path => $path,
   }
   ->
-  file { "/usr/bin/supervisord":
-    ensure => 'directory',
-  }
-  ->
-  file { "/usr/bin/supervisorctl":
-    ensure => 'directory',
-  }
-  ->
   file { "/var/log/supervisord":
     ensure => 'directory',
   }
   ->
   file { "/etc/init.d/supervisor":
     ensure => 'file',
-    source => template('supervisor/supervisor.erb'),
+    content => template('supervisor/supervisor.erb'),
+    mode => '755',
+  }
+  ->
+  file { "/etc/supervisor":
+    ensure => 'directory'
   }
   ->
   file { "$configuration_path":
     ensure => 'file',
-    source => template('supervisor/supervisor.conf.erb'),
+    content => template('supervisor/supervisor.conf.erb'),
+  }
+  ->
+  exec { "ln -s /usr/local/bin/supervisord /usr/bin/supervisord":
+    path => $path,
+  }
+  ->
+  exec { "ln -s /usr/local/bin/supervisorctl /usr/bin/supervisorctl":
+    path => $path,
   }
 
   service { 'supervisor':
