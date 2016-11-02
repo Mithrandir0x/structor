@@ -18,5 +18,10 @@ class storm_logviewer {
     command => "cat $conf_file >> ${supervisor::configuration_path}",
     path => $path,
   }
+  ->
+  exec { "restart_supervisor_logviewer_service":
+    command => "service supervisor restart",
+    path => $path,
+  }
 
 }
