@@ -79,24 +79,12 @@
     
   <property>
     <name>yarn.app.mapreduce.am.resource.mb</name>
-    <value>
-      <% if @yarn_mr %>
-        <%= @yarn_mr[:yarn_app_mapreduce_am_resource_mb] %>
-      <% else %>
-        <%= @am_mem %>
-      <% end %>
-    </value>
+    <value><% if @yarn_mr %><%= @yarn_mr[:yarn_app_mapreduce_am_resource_mb] %><% else %><%= @am_mem %><% end %></value>
   </property>
     
   <property>
     <name>mapreduce.map.java.opts</name>
-    <value>
-      <% if @yarn_mr %>
-        <%= @yarn_mr[:mapreduce_map_java_opts] %>
-      <% else %>
-        -Xmx<%= @client_mem %>m
-      <% end %>
-    </value>
+    <value><% if @yarn_mr %><%= @yarn_mr[:mapreduce_map_java_opts] %><% else %>-Xmx<%= @client_mem %>m<% end %></value>
   </property>
     
   <property>
@@ -121,13 +109,7 @@
     
   <property>
     <name>mapreduce.reduce.java.opts</name>
-    <value>
-      <% if @yarn_mr %>
-        <%= @yarn_mr[:mapreduce_reduce_java_opts] %>
-      <% else %>
-        -Xmx<%= @client_mem %>m
-      <% end %>
-    </value>
+    <value><% if @yarn_mr %><%= @yarn_mr[:mapreduce_reduce_java_opts] %><% else %>-Xmx<%= @client_mem %>m<% end %></value>
   </property>
     
   <property>
@@ -152,13 +134,7 @@
     
   <property>
     <name>mapreduce.task.io.sort.mb</name>
-    <value>
-      <% if @yarn_mr %>
-        <%= @yarn_mr[:mapreduce_task_io_sort_mb] %>
-      <% else %>
-        <%= @client_mem.to_i / 3 %>
-      <% end %>
-    </value>
+    <value><% if @yarn_mr %><%= @yarn_mr[:mapreduce_task_io_sort_mb] %><% else %><%= @client_mem.to_i / 3 %><% end %></value>
   </property>
     
   <property>
@@ -168,13 +144,7 @@
     
   <property>
     <name>mapreduce.map.memory.mb</name>
-    <value>
-      <% if @yarn_mr %>
-        <%= @yarn_mr[:mapreduce_map_memory_mb] %>
-      <% else %>
-        -Xmx<%= @client_mem %>m
-      <% end %>
-    </value>
+    <value><% if @yarn_mr %><%= @yarn_mr[:mapreduce_map_memory_mb] %><% else %>-Xmx<%= @client_mem %>m<% end %></value>
   </property>
     
   <property>
@@ -189,13 +159,7 @@
     
   <property>
     <name>mapreduce.reduce.memory.mb</name>
-    <value>
-      <% if @yarn_mr %>
-        <%= @yarn_mr[:mapreduce_reduce_memory_mb] %>
-      <% else %>
-        -Xmx<%= @client_mem %>m
-      <% end %>
-    </value>
+    <value><% if @yarn_mr %><%= @yarn_mr[:mapreduce_reduce_memory_mb] %><% else %>-Xmx<%= @client_mem %>m<% end %></value>
   </property>
     
   <property>
@@ -250,13 +214,7 @@
     
   <property>
     <name>yarn.app.mapreduce.am.command-opts</name>
-    <value>
-      <% if @yarn_mr %>
-        <%= @yarn_mr[:yarn_app_mapreduce_am_command_opts] %>
-      <% else %>
-        -Xmx<%= @client_mem.to_i / 2 %>m
-      <% end %>
-    </value>
+    <value><% if @yarn_mr %><%= @yarn_mr[:yarn_app_mapreduce_am_command_opts] %><% else %>-Xmx<%= @client_mem.to_i / 2 %>m<% end %></value>
   </property>
     
   <property>
