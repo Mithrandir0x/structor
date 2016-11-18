@@ -70,6 +70,12 @@ class hdfs_client {
     ensure => installed,
   }
 
+  if ($operatingsystem == "ubuntu") {
+    package { 'libsnappy-dev':
+      ensure => installed,
+    }
+  }
+
   if ($operatingsystem == "centos") {
     package { 'lzo':
       ensure => installed,
