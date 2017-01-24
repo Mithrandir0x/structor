@@ -109,14 +109,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.vm.provider :virtualbox do |vb|
         if node[:vm_mem]
           vb.customize ["modifyvm", :id, "--memory", node[:vm_mem] ]
+          # puts "Assigning to [#{node[:hostname]}] memory [#{node[:vm_mem]}] from node profile\n"
         else
           vb.customize ["modifyvm", :id, "--memory", profile[:vm_mem] ]
+          # puts "Assigning to [#{node[:hostname]}] memory [#{profile[:vm_mem]}] from global profile\n"
         end
         
         if node[:vm_cpus]
           vb.customize ["modifyvm", :id, "--cpus", node[:vm_cpus] ]
+          # puts "Assigning to [#{node[:hostname]}] cpu [#{node[:vm_cpus]}] from node profile\n"
         else
           vb.customize ["modifyvm", :id, "--cpus", profile[:vm_cpus] ]
+          # puts "Assigning to [#{node[:hostname]}] cpu [#{profile[:vm_cpus]}] from global profile\n"
         end
 
         vb.customize ["modifyvm", :id, "--ioapic", "on"]
@@ -136,7 +140,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end
       end
 
-      if node[:shared_folders]
+      if profile[:shared_folders]
         profile[:shared_folders].each do |shared_folder|
           node_config.vm.synced_folder shared_folder[:host], shared_folder[:guest]
         end
@@ -190,3 +194,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 end
+
