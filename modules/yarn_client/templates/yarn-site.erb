@@ -68,12 +68,12 @@
     
   <property>
     <name>yarn.nodemanager.resource.memory-mb</name>
-    <value><% if @yarn_sch %><%= @yarn_sch[:yarn_nodemanager_resource_memory_mb] %><% else %><% if @vm_mem.to_i <= 4096 %><%= @vm_mem.to_i - 1024 %><% elsif @vm_mem.to_i <= 8192 %><%= @vm_mem.to_i - 2048 %><% else %><%= @vm_mem.to_i - 4096 %><% end %><% end %></value>
+    <value><% if @yarn_sch %><%= @yarn_sch[:yarn_nodemanager_resource_memory_mb] %><% else %><% if @vm_mem.to_i <= 4096 %><%= @vm_mem.to_i - 1024 - @extra_os_mem.to_i %><% elsif @vm_mem.to_i <= 8192 %><%= @vm_mem.to_i - 2048 - @extra_os_mem.to_i %><% else %><%= @vm_mem.to_i - 4096 - @extra_os_mem.to_i %><% end %><% end %></value>
   </property>
     
   <property>
     <name>yarn.scheduler.maximum-allocation-mb</name>
-    <value><% if @yarn_sch %><%= @yarn_sch[:yarn_scheduler_maximum_allocation_mb] %><% else %><% if @vm_mem.to_i <= 4096 %><%= @vm_mem.to_i - 1024 %><% elsif @vm_mem.to_i <= 8192 %><%= @vm_mem.to_i - 2048 %><% else %><%= @vm_mem.to_i - 4096 %><% end %><% end %></value>
+    <value><% if @yarn_sch %><%= @yarn_sch[:yarn_scheduler_maximum_allocation_mb] %><% else %><% if @vm_mem.to_i <= 4096 %><%= @vm_mem.to_i - 1024 - @extra_os_mem.to_i %><% elsif @vm_mem.to_i <= 8192 %><%= @vm_mem.to_i - 2048 - @extra_os_mem.to_i %><% else %><%= @vm_mem.to_i - 4096 - @extra_os_mem.to_i %><% end %><% end %></value>
   </property>
     
   <property>
